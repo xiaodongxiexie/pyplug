@@ -12,11 +12,11 @@ Plug.__default__ = default
 
 class KlassOne(plug):
     @customization(100, default=default)
-    def do_something(info, value, loc=1):
+    def do_something(self, info, value, loc=1):
         return info, value, loc
 
     @customization(90, default=default)
-    def do_something_else(info, value, loc=2):
+    def do_something_else(self, info, value, loc=2):
         return {
             "info": info,
             "value": value,
@@ -26,11 +26,11 @@ class KlassOne(plug):
 
 class KlassTwo(plug):
     @customization(110, default=default)
-    def do_something(info, value, loc=3):
+    def do_something(self, info, value, loc=3):
         return [info, value, loc]
 
     @customization(default=default)
-    def do_something_special(different_arg):
+    def do_something_special(self, different_arg):
         return different_arg
 
 
