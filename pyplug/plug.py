@@ -5,9 +5,9 @@
 import sys
 import types
 
-from functools import wraps
-from typing import Union
 from bisect import insort_right
+from functools import wraps, partial
+from typing import Union
 
 
 __all__ = ["Plug", "plug", "customization"]
@@ -45,8 +45,8 @@ class Plug(type):
             if storage_key in mcs.__customization_storage__:
                 raise FuncAlreadyExistError(storage_key)
             else:
-                mcs.__customization_storage__[storage_key] = v
-                insort_right(mcs.__ordered_customization_storage__, (-v._weight, storage_key, v))
+                mcs.__customization_storage__[storage_key] = partial(v, mcs)
+                insort_right(mcs.__ordered_customization_storage__, (-v._weight, storage_key, partial(v, mcs)))
         return super().__new__(mcs, name, bases, d)
 
 
@@ -91,3 +91,23 @@ class customization:
 
     def __call__(self, func: callable):
         return self._customization(func)
+
+
+class staticcustomization:
+
+    def __init__(self, weight: Union[int, float] = 0, default: str = "__default__"):
+        self.weight = weight
+        self.default = default
+
+    def __call__(self, func: callable) -> callable:
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            return func(*args, **kwargs)
+        wrapper.__customization_name__ = self.default
+        wrapper._weight = self.weight
+        return wrapper
+
+    def __get__(self, instance, cls):
+        if instance is None:
+            return self
+        return types.MethodType(self,  instance)
