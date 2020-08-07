@@ -21,6 +21,9 @@ class FuncAlreadyExistError(Exception):
 
 
 class Plug(type):
+    """
+    metaclass to trace which should been executed together.
+    """
     def __new__(mcs, name, bases, d):
         if not hasattr(mcs, "__customization_storage__"):
             setattr(mcs, "__customization_storage__", {})
@@ -46,8 +49,22 @@ class plug(metaclass=Plug):
 
 
 class customization:
+    """
+    this can use as a decorator in a class.
+    ...example
+        class your-class(plug):
+            @customization(<this-func-weight: [int, flot]>)
+            def your-func(...):
+                do_something(...)
+                return something
+
+    """
 
     def __init__(self, weight: Union[int, float] = 0):
+        """
+        :param weight: this can change your custom-made func call order
+                       larger then have a priority
+        """
 
         class _customization:
             def __init__(self, func: callable):
@@ -68,3 +85,4 @@ class customization:
 
     def __call__(self, func: callable):
         return self._customization(func)
+
