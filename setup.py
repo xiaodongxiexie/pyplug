@@ -3,7 +3,7 @@
 # @Date  : 2020/8/6
 
 from setuptools import setup, find_packages
-from pyplug import *
+from pyplug import __title__, __version__, __description__, __author__, __author_email__
 
 def long_description():
     with open("README.md", encoding="utf-8") as file:
