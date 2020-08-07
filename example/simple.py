@@ -21,14 +21,14 @@ class Mock(object):
 
 class FetchData(plug):
     @customization(0, default=default)
-    def test(url="http://example.com/data"):
+    def test(self, url="http://example.com/data"):
         data = Mock(url)()
         return data
 
 
 class FetchData2(plug):
     @customization(10, default=default)
-    def test(times: int, url="http://example2.com/data"):
+    def test(self, times: int, url="http://example2.com/data"):
         """
         this is some description
         """
