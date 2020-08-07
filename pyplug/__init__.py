@@ -3,6 +3,9 @@
 # @Date  : 2020/8/6
 
 
+from .plug import Plug, plug, customization
+
+
 __title__ = 'pyplug'
 __description__ = 'A simple plug system.'
 __version__ = '0.0.1'
