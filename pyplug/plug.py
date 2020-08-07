@@ -27,6 +27,9 @@ class Plug(type):
     """
     metaclass to trace which should been executed together.
     """
+
+    __default__ = "__default__"
+
     def __new__(mcs, name, bases, d):
         if not hasattr(mcs, "__customization_storage__"):
             setattr(mcs, "__customization_storage__", {})
@@ -34,7 +37,7 @@ class Plug(type):
         for k, v in d.items():
             if not hasattr(v, "__customization_name__"):
                 continue
-            if getattr(v, "__customization_name__") != "customization":
+            if getattr(v, "__customization_name__") != mcs.__default__:
                 continue
 
             storage_key = ".".join([name, k])
@@ -63,7 +66,7 @@ class customization:
 
     """
 
-    def __init__(self, weight: Union[int, float] = 0):
+    def __init__(self, weight: Union[int, float] = 0, default: str = "__default__"):
         """
         :param weight: this can change your custom-made func call order
                        larger then have a priority
@@ -73,7 +76,6 @@ class customization:
             def __init__(self, func: callable):
                 wraps(func)(self)
                 self.func = func
-                self.__customization_name__ = "customization"
 
             def __call__(self, *args, **kwargs):
                 return self.func(*args, **kwargs)
@@ -84,8 +86,8 @@ class customization:
                 return types.MethodType(self, instance)
 
         _customization._weight = weight
+        _customization.__customization_name__ = default
         self._customization = _customization
 
     def __call__(self, func: callable):
         return self._customization(func)
-
