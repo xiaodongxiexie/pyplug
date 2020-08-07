@@ -5,6 +5,11 @@
 from pyplug.plug import Plug, plug, customization
 
 
+default = "my_first_hook"
+
+Plug.__default__ = default
+
+
 class Mock(object):
 
     def __init__(self, *args, **kwargs):
@@ -15,14 +20,14 @@ class Mock(object):
 
 
 class FetchData(plug):
-    @customization(0)
+    @customization(0, default=default)
     def test(url="http://example.com/data"):
         data = Mock(url)()
         return data
 
 
 class FetchData2(plug):
-    @customization(10)
+    @customization(10, default=default)
     def test(times: int, url="http://example2.com/data"):
         """
         this is some description
