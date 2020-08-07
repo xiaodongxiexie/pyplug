@@ -3,11 +3,11 @@
 # @Date  : 2020/8/6
 
 from setuptools import setup, find_packages
-from pyplug import __author__, __author_email__, __version__, __title__, __description__
-
+from pyplug import *
 
 def long_description():
-    description = ""
+    with open("README.md", encoding="utf-8") as file:
+       description = file.read()
     return description
 
 
@@ -16,13 +16,16 @@ setup(
     version=__version__,
     description=__description__,
     long_description=long_description(),
-    url="",
+    url="https://github.com/xiaodongxiexie/pyplug",
     author=__author__,
     author_email=__author_email__,
     data_files=[
         ("example", [
             "example/simple.py",
         ]),
+        ("test", [
+            "test/test_plug.py",
+                ]),
     ],
     packages=find_packages(),
     include_package_data=True,
