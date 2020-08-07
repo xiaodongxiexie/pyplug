@@ -6,13 +6,16 @@ import unittest
 
 from pyplug.plug import Plug, plug, customization
 
+default = "my_first_hook"
+
+Plug.__default__ = default
 
 class KlassOne(plug):
-    @customization(100)
+    @customization(100, default=default)
     def do_something(info, value, loc=1):
         return info, value, loc
 
-    @customization(90)
+    @customization(90, default=default)
     def do_something_else(info, value, loc=2):
         return {
             "info": info,
@@ -22,11 +25,11 @@ class KlassOne(plug):
 
 
 class KlassTwo(plug):
-    @customization(110)
+    @customization(110, default=default)
     def do_something(info, value, loc=3):
         return [info, value, loc]
 
-    @customization()
+    @customization(default=default)
     def do_something_special(different_arg):
         return different_arg
 
