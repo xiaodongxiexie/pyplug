@@ -1,6 +1,9 @@
 
-
+include test/*
 include example/simple.py
+include README.md
+include .coverage
+include .editorconfig
 
 
 graft pyplug
@@ -8,5 +11,4 @@ graft pyplug
 global-exclude __pycache__
 global-exclude *.py[co]
 global-exclude *.LOCK
-
 
