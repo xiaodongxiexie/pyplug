@@ -4,7 +4,7 @@
 
 import unittest
 
-from pyplug.plug import Plug, plug, customization
+from pyplug.plug import Plug, plug, customization, staticcustomization, FuncAlreadyExistError
 
 default = "my_first_hook"
 
@@ -15,7 +15,7 @@ class KlassOne(plug):
     def do_something(self, info, value, loc=1):
         return info, value, loc
 
-    @customization(90, default=default)
+    @staticcustomization(90, default=default)
     def do_something_else(self, info, value, loc=2):
         return {
             "info": info,
@@ -85,6 +85,14 @@ class TestPlugWithOrder(unittest.TestCase):
                          "KlassOne.do_something_else")
         self.assertEqual(Plug.__ordered_customization_storage__[3][1],
                          "KlassTwo.do_something_special")
+
+
+class TestExistKlassAndFunc(unittest.TestCase):
+
+    def test_exist_klass_and_func(self):
+        with self.assertRaises(FuncAlreadyExistError) as cm:
+            from test_plug_else import KlassOne as AnotherKlassOne
+        self.assertRegex(cm.exception.__str__(), ".*already existed")
 
 
 if __name__ == '__main__':
